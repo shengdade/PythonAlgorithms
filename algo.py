@@ -1,6 +1,7 @@
 # module for common python algorithms
 
 from stru import Stack
+from stru import Deque
 
 # greatest common divisor
 def gcd(m,n):
@@ -51,3 +52,20 @@ def base_converter(dec_number, base):
         new_string = new_string + digits[rem_stack.pop()]
 
     return new_string
+
+# palindrome checker
+def pal_checker(a_string):
+    char_deque = Deque()
+
+    for ch in a_string:
+        char_deque.add_rear(ch)
+
+    still_equal = True
+
+    while char_deque.size() > 1 and still_equal:
+        first = char_deque.remove_front()
+        last = char_deque.remove_rear()
+        if first != last:
+            still_equal = False
+
+    return still_equal
