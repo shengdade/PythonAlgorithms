@@ -53,6 +53,14 @@ def base_converter(dec_number, base):
 
     return new_string
 
+# decimal numbers to base numbers using recursion
+def base_converter_recur(n, base):
+    convert_string = "0123456789ABCDEF"
+    if n < base:
+        return convert_string[n]
+    else:
+        return base_converter_recur(n // base, base) + convert_string[n % base]
+
 # palindrome checker
 def pal_checker(a_string):
     char_deque = Deque()
