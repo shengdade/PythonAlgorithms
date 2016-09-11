@@ -138,3 +138,11 @@ def binary_search_recur(a_list, item):
                 return binary_search_recur(a_list[:midpoint], item)
             else:
                 return binary_search_recur(a_list[midpoint + 1:], item)
+
+# simply hash a string
+def hash_string(a_string, table_size):
+    sum = 0
+    for pos in range(len(a_string)):
+        sum = sum + ord(a_string[pos])
+
+    return sum % table_size
