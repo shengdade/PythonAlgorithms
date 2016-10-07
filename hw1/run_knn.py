@@ -27,9 +27,9 @@ def run_knn(k, train_data, train_labels, valid_data):
     """
 
     # TODO call l2_distance to compute distance between valid data and train data
-    dist = ...
+    dist = l2_distance(valid_data.T, train_data.T)
     # TODO sort the distance to get top k nearest data
-    nearest = ...
+    nearest = dist.argpartition(k)[:,:k]
 
     train_labels = train_labels.reshape(-1)
     valid_labels = train_labels[nearest]
