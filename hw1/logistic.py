@@ -19,15 +19,16 @@ def logistic_predict(weights, data):
     Outputs:
         y:          :N x 1 vector of probabilities of being second class. This is the output of the classifier.
     """
-    # TODO: Finish this function
-    [...]
-
+    w = weights[:-1]
+    w0 = weights[-1]
+    linear = np.dot(w.T, data.T) + w0
+    y = 1 - sigmoid(linear.T)
     return y
 
 
 def evaluate(targets, y):
     """
-    Compute evaluation metrics.
+    Compute evaluation metrics.x
     Inputs:
         targets : N x 1 vector of targets.
         y       : N x 1 vector of probabilities.
@@ -35,9 +36,8 @@ def evaluate(targets, y):
         ce           : (scalar) Cross entropy. CE(p, q) = E_p[-log q]. Here we want to compute CE(targets, y)
         frac_correct : (scalar) Fraction of inputs classified correctly.
     """
-    # TODO: Finish this function
-    [...]
-
+    ce = np.sum(targets * (-np.log(y)))
+    frac_correct = float(np.sum((y >= 0.5).astype(np.int) == targets)) / targets.size
     return ce, frac_correct
 
 
@@ -66,14 +66,21 @@ def logistic(weights, data, targets, hyperparameters):
     y = logistic_predict(weights, data)
 
     if hyperparameters['weight_regularization'] is True:
+        """
         f, df = logistic_pen(weights, data, targets, hyperparameters)
+        """
     else:
-        # TODO: compute f and df without regularization
-        [...]
+        # compute f and df without regularization
+        f = -np.sum(targets * np.log(y)) - np.sum((1 - targets) * np.log(1 - y))
+        df = np.zeros((weights.size, 1))
+        for j in xrange(weights.size - 1):
+            df[j, 0] = np.sum(data[:, [j]] * (targets - y))
+        df[weights.size - 1, 0] = np.sum(targets - y)
 
     return f, df, y
 
 
+'''
 def logistic_pen(weights, data, targets, hyperparameters):
     """
     Calculate negative log likelihood and its derivatives with respect to weights.
@@ -97,5 +104,6 @@ def logistic_pen(weights, data, targets, hyperparameters):
 
     # TODO: Finish this function
     [...]
-    
+
     return f, df
+'''

@@ -5,7 +5,7 @@ from logistic import *
 
 def run_logistic_regression(hyperparameters):
     # TODO specify training data
-    train_inputs, train_targets = [...]
+    train_inputs, train_targets = load_train()
 
     valid_inputs, valid_targets = load_valid()
 
@@ -14,7 +14,7 @@ def run_logistic_regression(hyperparameters):
 
     # Logistic regression weights
     # TODO:Initialize to random weights here.
-    weights = [...]
+    weights = np.random.randn(M + 1, 1)
 
     # Verify that your logistic function produces the right gradient.
     # diff should be very close to 0.
@@ -26,7 +26,7 @@ def run_logistic_regression(hyperparameters):
 
         # Find the negative log likelihood and its derivatives w.r.t. the weights.
         f, df, predictions = logistic(weights, train_inputs, train_targets, hyperparameters)
-        
+
         # Evaluate the prediction.
         cross_entropy_train, frac_correct_train = evaluate(train_targets, predictions)
 
@@ -45,10 +45,12 @@ def run_logistic_regression(hyperparameters):
         # print some stats
         print ("ITERATION:{:4d}  TRAIN NLOGL:{:4.2f}  TRAIN CE:{:.6f} "
                "TRAIN FRAC:{:2.2f}  VALID CE:{:.6f}  VALID FRAC:{:2.2f}").format(
-                   t+1, f / N, cross_entropy_train, frac_correct_train*100,
-                   cross_entropy_valid, frac_correct_valid*100)
-        logging[t] = [f / N, cross_entropy_train, frac_correct_train*100, cross_entropy_valid, frac_correct_valid*100]
+            t + 1, f / N, cross_entropy_train, frac_correct_train * 100,
+            cross_entropy_valid, frac_correct_valid * 100)
+        logging[t] = [f / N, cross_entropy_train, frac_correct_train * 100, cross_entropy_valid,
+                      frac_correct_valid * 100]
     return logging
+
 
 def run_check_grad(hyperparameters):
     """Performs gradient check on logistic function.
@@ -59,27 +61,28 @@ def run_check_grad(hyperparameters):
     num_examples = 7
     num_dimensions = 9
 
-    weights = np.random.randn(num_dimensions+1, 1)
-    data    = np.random.randn(num_examples, num_dimensions)
+    weights = np.random.randn(num_dimensions + 1, 1)
+    data = np.random.randn(num_examples, num_dimensions)
     targets = (np.random.rand(num_examples, 1) > 0.5).astype(int)
 
-    diff = check_grad(logistic,      # function to check
+    diff = check_grad(logistic,  # function to check
                       weights,
-                      0.001,         # perturbation
+                      0.001,  # perturbation
                       data,
                       targets,
                       hyperparameters)
 
     print "diff =", diff
 
+
 if __name__ == '__main__':
     # TODO: Set hyperparameters
     hyperparameters = {
-                    'learning_rate': [...],
-                    'weight_regularization': [...], # boolean, True for using Gaussian prior on weights
-                    'num_iterations': [...],
-                    'weight_decay': [...] # related to standard deviation of weight prior 
-                    }
+        'learning_rate': 0.35,
+        'weight_regularization': False,  # boolean, True for using Gaussian prior on weights
+        'num_iterations': 300,
+        'weight_decay': 0.1  # related to standard deviation of weight prior
+    }
 
     # average over multiple runs
     num_runs = 1
@@ -89,4 +92,3 @@ if __name__ == '__main__':
     logging /= num_runs
 
     # TODO generate plots
-    [...]
