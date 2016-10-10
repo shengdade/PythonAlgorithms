@@ -66,9 +66,7 @@ def logistic(weights, data, targets, hyperparameters):
     y = logistic_predict(weights, data)
 
     if hyperparameters['weight_regularization'] is True:
-        """
         f, df = logistic_pen(weights, data, targets, hyperparameters)
-        """
     else:
         # compute f and df without regularization
         f = -np.sum(targets * np.log(y)) - np.sum((1 - targets) * np.log(1 - y))
@@ -80,7 +78,6 @@ def logistic(weights, data, targets, hyperparameters):
     return f, df, y
 
 
-'''
 def logistic_pen(weights, data, targets, hyperparameters):
     """
     Calculate negative log likelihood and its derivatives with respect to weights.
@@ -102,8 +99,14 @@ def logistic_pen(weights, data, targets, hyperparameters):
         df:            (M+1) x 1 vector of accumulative derivative of f w.r.t. weights, i.e. don't need to average over number of sample
     """
 
-    # TODO: Finish this function
-    [...]
+    y = logistic_predict(weights, data)
+    weight_decay = hyperparameters['weight_decay']
+
+    # compute f and df with regularization
+    f = -np.sum(targets * np.log(y)) - np.sum((1 - targets) * np.log(1 - y))
+    df = np.zeros((weights.size, 1))
+    for j in xrange(weights.size - 1):
+        df[j, 0] = np.sum(data[:, [j]] * (targets - y)) + weight_decay * df[j, 0]
+    df[weights.size - 1, 0] = np.sum(targets - y) + weight_decay * df[weights.size - 1, 0]
 
     return f, df
-'''

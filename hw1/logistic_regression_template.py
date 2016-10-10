@@ -79,9 +79,9 @@ if __name__ == '__main__':
     # TODO: Set hyperparameters
     hyperparameters = {
         'learning_rate': 0.35,
-        'weight_regularization': False,  # boolean, True for using Gaussian prior on weights
+        'weight_regularization': True,  # boolean, True for using Gaussian prior on weights
         'num_iterations': 300,
-        'weight_decay': 0.1  # related to standard deviation of weight prior
+        'weight_decay': 0.5  # related to standard deviation of weight prior
     }
 
     # average over multiple runs
