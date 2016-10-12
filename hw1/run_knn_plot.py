@@ -11,6 +11,7 @@ def run_knn_plot():
     # count classification rate for each k
     kk = range(1, 10, 2)
     classification_rate = [count_rate(k, train_inputs, train_targets, valid_inputs, valid_targets) for k in kk]
+    print("classification_rate", classification_rate)
 
     # plot the rates
     plt.plot(kk, classification_rate, 'ro', kk, classification_rate, 'y')

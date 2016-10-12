@@ -1,6 +1,7 @@
 from check_grad import check_grad
 from utils import *
 from logistic import *
+import matplotlib.pyplot as plt
 
 
 def run_logistic_regression(hyperparameters):
@@ -14,7 +15,9 @@ def run_logistic_regression(hyperparameters):
 
     # Logistic regression weights
     # TODO:Initialize to random weights here.
-    weights = np.random.randn(M + 1, 1)
+    weights = np.random.randn(M + 1, 1) * 0.01
+    # weights = np.random.normal(0, 0.5, M + 1).reshape(-1, 1)
+    # weights = np.ones((M + 1, 1)) * 0.0
 
     # Verify that your logistic function produces the right gradient.
     # diff should be very close to 0.
@@ -49,6 +52,7 @@ def run_logistic_regression(hyperparameters):
             cross_entropy_valid, frac_correct_valid * 100)
         logging[t] = [f / N, cross_entropy_train, frac_correct_train * 100, cross_entropy_valid,
                       frac_correct_valid * 100]
+
     return logging
 
 
@@ -78,10 +82,10 @@ def run_check_grad(hyperparameters):
 if __name__ == '__main__':
     # TODO: Set hyperparameters
     hyperparameters = {
-        'learning_rate': 0.35,
+        'learning_rate': 0.05,
         'weight_regularization': True,  # boolean, True for using Gaussian prior on weights
         'num_iterations': 300,
-        'weight_decay': 0.5  # related to standard deviation of weight prior
+        'weight_decay': 1  # related to standard deviation of weight prior
     }
 
     # average over multiple runs
@@ -91,4 +95,12 @@ if __name__ == '__main__':
         logging += run_logistic_regression(hyperparameters)
     logging /= num_runs
 
-    # TODO generate plots
+    # generate plots
+    training_plot = plt.plot(logging[:, 1], 'r', label='training set')
+    validation_plot = plt.plot(logging[:, 3], 'y', label='validation set')
+    # plt.title('mnist_train_small')
+    plt.title('mnist_train')
+    plt.legend(loc='upper right')
+    plt.xlabel('Number of Iterations')
+    plt.ylabel('Cross Entropy')
+    plt.show()
