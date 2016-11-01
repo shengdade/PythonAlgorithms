@@ -37,10 +37,6 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
     mu = mn + np.random.randn(N, K) * (np.sqrt(vr) / randConst)
 
     #------------------- Answers ---------------------
-    # to be removed before release
-    # K = 7
-    # iter_kmeans = 5
-    # mu = KMeans(x, K, iter_kmeans)
 
     #------------------------------------------------------------
     vary = vr * np.ones((1, K)) * 2
@@ -150,13 +146,6 @@ def q2():
     #------------------- Add your code here ---------------------
 
     #------------------- Answers ---------------------
-    # to be removed before release
-    p, mu, vary, log_likelihood = mogEM(
-        inputs_train, K, iters, randConst=randConst, minVary=minVary)
-
-    ShowMeans(mu, 1)
-    ShowMeans(vary, 2)
-    print 'mixing coefficients = %s' % p
 
 
 def q4():
@@ -203,12 +192,6 @@ def q4():
         #-------------------- Add your code here ------------------------------
 
         #------------------- Answers ---------------------
-        # to be removed before release
-        p_a, mu_a, vary_a, log_likelihood_train_a = mogEM(
-            x_train_anger, K, iters, randConst=randConst, minVary=minVary)
-
-        p_h, mu_h, vary_h, log_likelihood_train_h = mogEM(
-            x_train_happy, K, iters, randConst=randConst, minVary=minVary)
 
         # Compute the probability P(d|x), classify examples, and compute error rate
         # Hints: using (x_train, y_train), (x_valid, y_valid), (x_test, y_test)
@@ -216,46 +199,6 @@ def q4():
         #-------------------- Add your code here ------------------------------
 
         #------------------- Answers ---------------------
-        # to be removed before release
-        log_likelihood_train_a = mogLogLikelihood(
-            p_a, mu_a, vary_a, x_train) + log_likelihood_class[0]
-
-        log_likelihood_train_h = mogLogLikelihood(
-            p_h, mu_h, vary_h, x_train) + + log_likelihood_class[1]
-
-        predict_label_train = (log_likelihood_train_a <
-                               log_likelihood_train_h).astype(float)
-
-        log_likelihood_valid_a = mogLogLikelihood(
-            p_a, mu_a, vary_a, x_valid) + log_likelihood_class[0]
-
-        log_likelihood_valid_h = mogLogLikelihood(
-            p_h, mu_h, vary_h, x_valid) + + log_likelihood_class[1]
-
-        predict_label_valid = (log_likelihood_valid_a <
-                               log_likelihood_valid_h).astype(float)
-
-        log_likelihood_test_a = mogLogLikelihood(
-            p_a, mu_a, vary_a, x_test) + log_likelihood_class[0]
-
-        log_likelihood_test_h = mogLogLikelihood(
-            p_h, mu_h, vary_h, x_test) + + log_likelihood_class[1]
-
-        predict_label_test = (log_likelihood_test_a <
-                              log_likelihood_test_h).astype(float)
-
-        errorTrain[t] = np.sum(
-            (predict_label_train != y_train).astype(float)) / y_train.shape[0]
-
-        errorValidation[t] = np.sum(
-            (predict_label_valid != y_valid).astype(float)) / y_valid.shape[0]
-
-        errorTest[t] = np.sum(
-            (predict_label_test != y_test).astype(float)) / y_test.shape[0]
-
-        print 'Training error rate = %.5f' % errorTrain[t]
-        print 'Validation error rate = %.5f' % errorValidation[t]
-        print 'Testing error rate = %.5f' % errorTest[t]
 
     # Plot the error rate
     plt.figure(0)

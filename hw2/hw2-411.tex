@@ -129,10 +129,10 @@ Define the 2-D convolution operator $\ast$ as:
 y_{n, h', w', k} = x \ast f = 
 \sum_{i=1}^{I} 
 \sum_{j=1}^{J} 
-\sum_{c=1}^C x_{n,h'+i,w'+j,c} \cdot f_{i,j,c,k}
+\sum_{c=1}^C x_{n,h'+i-1,w'+j-1,c} \cdot f_{i,j,c,k}
 \eeqa
-for $1 \le h' \le H-I+1$, $1 \le w' \le W-J+1$. (Note: this is ``correlation''
-in signal processing.)
+for $1 \le h' \le H - I + 1$, $1 \le w' \le W - J + 1$. 
+(Note: this is ``correlation'' in signal processing.)
 
 Define the filter transpose as:
 \beqa
