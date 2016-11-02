@@ -80,14 +80,10 @@ def AffineBackward(grad_y, x, w):
         grad_w: Gradients wrt. the weights.
         grad_b: Gradients wrt. the biases.
     """
-    ###########################
-    # Insert your code here.
-    # grad_x = ...
-    # grad_w = ...
-    # grad_b = ...
-    # return grad_x, grad_w, grad_b
-    ###########################
-    raise Exception('Not implemented')
+    grad_x = np.dot(grad_y, w.T)
+    grad_w = np.dot(x.T, grad_y)
+    grad_b = np.sum(grad_y, axis=0)
+    return grad_x, grad_w, grad_b
 
 
 def ReLU(x):
@@ -108,12 +104,8 @@ def ReLUBackward(grad_y, x, y):
     Returns:
         grad_x: Gradients wrt. the inputs.
     """
-    ###########################
-    # Insert your code here.
-    # grad_x = ...
-    # return grad_x
-    ###########################
-    raise Exception('Not implemented')
+    grad_x = grad_y * (x > 0).astype(int)
+    return grad_x
 
 
 def Softmax(x):
@@ -184,17 +176,12 @@ def NNUpdate(model, eps, momentum):
         eps:      Learning rate.
         momentum: Momentum.
     """
-    ###########################
-    # Insert your code here.
-    # Update the weights.
-    # model['W1'] = ...
-    # model['W2'] = ...
-    # model['W3'] = ...
-    # model['b1'] = ...
-    # model['b2'] = ...
-    # model['b3'] = ...
-    ###########################
-    raise Exception('Not implemented')
+    model['W1'] = model['W1'] - eps * model['dE_dW1']
+    model['W2'] = model['W2'] - eps * model['dE_dW2']
+    model['W3'] = model['W3'] - eps * model['dE_dW3']
+    model['b1'] = model['b1'] - eps * model['dE_db1']
+    model['b2'] = model['b2'] - eps * model['dE_db2']
+    model['b3'] = model['b3'] - eps * model['dE_db3']
 
 
 def Train(model, forward, backward, update, eps, momentum, num_epochs,
@@ -228,7 +215,7 @@ def Train(model, forward, backward, update, eps, momentum, num_epochs,
     num_train_cases = inputs_train.shape[0]
     if batch_size == -1:
         batch_size = num_train_cases
-    num_steps = int(np.ceil(num_train_cases / batch_size))
+    num_steps = int(np.ceil(num_train_cases / batch_size))  # Potential BUG
     for epoch in range(num_epochs):
         np.random.shuffle(rnd_idx)
         inputs_train = inputs_train[rnd_idx]
