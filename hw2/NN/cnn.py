@@ -57,11 +57,9 @@ np.transpose(x, [3,1,2,0]) | [C, H, W, N]
 
 from __future__ import division
 from __future__ import print_function
-
 from util import LoadData, Load, Save, DisplayPlot
 from conv2d import conv2d as Conv2D
 from nn import Affine, ReLU, AffineBackward, ReLUBackward, Softmax, CheckGrad, Train, Evaluate
-
 import numpy as np
 
 
@@ -80,7 +78,7 @@ def InitCNN(num_channels, filter_size, num_filters_1, num_filters_2,
         model:         Randomly initialized network weights.
     """
     W1 = 0.1 * np.random.randn(filter_size, filter_size,
-                               num_channels,  num_filters_1)
+                               num_channels, num_filters_1)
     W2 = 0.1 * np.random.randn(filter_size, filter_size,
                                num_filters_1, num_filters_2)
     W3 = 0.01 * np.random.randn(num_filters_2 * 64, num_outputs)
@@ -286,6 +284,7 @@ def main():
 
     # Uncomment if you wish to save the training statistics.
     # Save(stats_fname, stats)
+
 
 if __name__ == '__main__':
     main()

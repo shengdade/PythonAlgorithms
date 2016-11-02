@@ -1,6 +1,7 @@
 from kmeans import *
 import sys
 import matplotlib.pyplot as plt
+
 plt.ion()
 
 if sys.version_info.major == 3:
@@ -28,17 +29,17 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
 
     # Initialize the parameters
     p = randConst + np.random.rand(K, 1)
-    p = p / np.sum(p)   # mixing coefficients
+    p = p / np.sum(p)  # mixing coefficients
     mn = np.mean(x, axis=1).reshape(-1, 1)
     vr = np.var(x, axis=1).reshape(-1, 1)
 
     # Question 4.3: change the initializaiton with Kmeans here
-    #--------------------  Add your code here --------------------
+    # --------------------  Add your code here --------------------
     mu = mn + np.random.randn(N, K) * (np.sqrt(vr) / randConst)
 
-    #------------------- Answers ---------------------
+    # ------------------- Answers ---------------------
 
-    #------------------------------------------------------------
+    # ------------------------------------------------------------
     vary = vr * np.ones((1, K)) * 2
     vary = (vary >= minVary) * vary + (vary < minVary) * minVary
 
@@ -52,12 +53,12 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
         respDist = np.zeros((N, K))
         ivary = 1 / vary
         logNorm = np.log(p) - 0.5 * N * np.log(2 * np.pi) - \
-            0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1)
+                  0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1)
         logPcAndx = np.zeros((K, T))
         for k in xrange(K):
-            dis = (x - mu[:, k].reshape(-1, 1))**2
+            dis = (x - mu[:, k].reshape(-1, 1)) ** 2
             logPcAndx[k, :] = logNorm[k] - 0.5 * \
-                np.sum(ivary[:, k].reshape(-1, 1) * dis, axis=0)
+                                           np.sum(ivary[:, k].reshape(-1, 1) * dis, axis=0)
 
         mx = np.max(logPcAndx, axis=0).reshape(1, -1)
         PcAndx = np.exp(logPcAndx - mx)
@@ -92,7 +93,7 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
         respDist = np.zeros((N, K))
         for k in xrange(K):
             respDist[:, k] = np.mean(
-                (x - mu[:, k].reshape(-1, 1))**2 * PcGivenx[k, :].reshape(1, -1), axis=1)
+                (x - mu[:, k].reshape(-1, 1)) ** 2 * PcGivenx[k, :].reshape(1, -1), axis=1)
 
         vary = respDist / respTot.T
         vary = (vary >= minVary) * vary + (vary < minVary) * minVary
@@ -119,10 +120,10 @@ def mogLogLikelihood(p, mu, vary, x):
     for t in xrange(T):
         # Compute log P(c)p(x|c) and then log p(x)
         logPcAndx = np.log(p) - 0.5 * N * np.log(2 * np.pi) \
-            - 0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1) \
-            - 0.5 * \
-            np.sum(ivary * (x[:, t].reshape(-1, 1) - mu)
-                   ** 2, axis=0).reshape(-1, 1)
+                    - 0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1) \
+                    - 0.5 * \
+                      np.sum(ivary * (x[:, t].reshape(-1, 1) - mu)
+                             ** 2, axis=0).reshape(-1, 1)
 
         mx = np.max(logPcAndx, axis=0)
         logLikelihood[t] = np.log(np.sum(np.exp(logPcAndx - mx))) + mx
@@ -143,9 +144,9 @@ def q2():
 
     # Train a MoG model with 7 components on all training data, i.e., inputs_train,
     # with both original initialization and kmeans initialization.
-    #------------------- Add your code here ---------------------
+    # ------------------- Add your code here ---------------------
 
-    #------------------- Answers ---------------------
+    # ------------------- Answers ---------------------
 
 
 def q4():
@@ -189,23 +190,23 @@ def q4():
 
         # Train a MoG model with K components
         # Hints: using (x_train_anger, x_train_happy) train 2 MoGs
-        #-------------------- Add your code here ------------------------------
+        # -------------------- Add your code here ------------------------------
 
-        #------------------- Answers ---------------------
+        # ------------------- Answers ---------------------
 
         # Compute the probability P(d|x), classify examples, and compute error rate
         # Hints: using (x_train, y_train), (x_valid, y_valid), (x_test, y_test)
         # to compute error rates, you may want to use mogLogLikelihood function
-        #-------------------- Add your code here ------------------------------
+        # -------------------- Add your code here ------------------------------
 
-        #------------------- Answers ---------------------
+        # ------------------- Answers ---------------------
 
     # Plot the error rate
     plt.figure(0)
     plt.clf()
-    #-------------------- Add your code here --------------------------------
+    # -------------------- Add your code here --------------------------------
 
-    #------------------- Answers ---------------------
+    # ------------------- Answers ---------------------
     # to be removed before release
     plt.plot(numComponents, errorTrain, 'r', label='Training')
     plt.plot(numComponents, errorValidation, 'g', label='Validation')
@@ -216,13 +217,14 @@ def q4():
     plt.draw()
     plt.pause(0.0001)
 
+
 if __name__ == '__main__':
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Note: Question 4.2 and 4.3 both need to call function q2
     # you need to comment function q4 below
     # q2()
 
-    #-------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
     # Note: Question 4.4 both need to call function q4
     # you need to comment function q2 above
     # q4()

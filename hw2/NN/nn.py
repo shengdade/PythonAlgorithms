@@ -18,7 +18,6 @@ the lines in "main()".
 
 from __future__ import division
 from __future__ import print_function
-
 from util import LoadData, Load, Save, DisplayPlot
 import sys
 import numpy as np
@@ -220,7 +219,7 @@ def Train(model, forward, backward, update, eps, momentum, num_epochs,
             - valid_acc:      Validation accuracy.
     """
     inputs_train, inputs_valid, inputs_test, target_train, target_valid, \
-        target_test = LoadData('../toronto_face.npz')
+    target_test = LoadData('../toronto_face.npz')
     rnd_idx = np.arange(inputs_train.shape[0])
     train_ce_list = []
     valid_ce_list = []
@@ -396,6 +395,7 @@ def main():
 
     # Uncomment if you wish to save the training statistics.
     # Save(stats_fname, stats)
+
 
 if __name__ == '__main__':
     main()
