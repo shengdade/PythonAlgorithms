@@ -374,8 +374,7 @@ def main():
     CheckGrad(model, NNForward, NNBackward, 'b1', x)
 
     # Train model.
-    stats = Train(model, NNForward, NNBackward, NNUpdate, eps,
-                  momentum, num_epochs, batch_size)
+    model, stats = Train(model, NNForward, NNBackward, NNUpdate, eps, momentum, num_epochs, batch_size)
 
     # Uncomment if you wish to save the model.
     # Save(model_fname, model)
