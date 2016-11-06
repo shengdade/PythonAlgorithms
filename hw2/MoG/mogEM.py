@@ -33,7 +33,7 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
     mn = np.mean(x, axis=1).reshape(-1, 1)
     vr = np.var(x, axis=1).reshape(-1, 1)
 
-    # Question 4.3: change the initializaiton with Kmeans here
+    # Question 4.3: change the initialization with Kmeans here
     # --------------------  Add your code here --------------------
     mu = mn + np.random.randn(N, K) * (np.sqrt(vr) / randConst)
 
@@ -48,17 +48,12 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
     # Do iters iterations of EM
     for i in xrange(iters):
         # Do the E step
-        respTot = np.zeros((K, 1))
-        respX = np.zeros((N, K))
-        respDist = np.zeros((N, K))
         ivary = 1 / vary
-        logNorm = np.log(p) - 0.5 * N * np.log(2 * np.pi) - \
-                  0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1)
+        logNorm = np.log(p) - 0.5 * N * np.log(2 * np.pi) - 0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1)
         logPcAndx = np.zeros((K, T))
         for k in xrange(K):
             dis = (x - mu[:, k].reshape(-1, 1)) ** 2
-            logPcAndx[k, :] = logNorm[k] - 0.5 * \
-                                           np.sum(ivary[:, k].reshape(-1, 1) * dis, axis=0)
+            logPcAndx[k, :] = logNorm[k] - 0.5 * np.sum(ivary[:, k].reshape(-1, 1) * dis, axis=0)
 
         mx = np.max(logPcAndx, axis=0).reshape(1, -1)
         PcAndx = np.exp(logPcAndx - mx)
@@ -86,15 +81,12 @@ def mogEM(x, K, iters, randConst=1, minVary=0):
         respX = np.zeros((N, K))
         for k in xrange(K):
             respX[:, k] = np.mean(x * PcGivenx[k, :].reshape(1, -1), axis=1)
-
         mu = respX / respTot.T
 
         # update variance
         respDist = np.zeros((N, K))
         for k in xrange(K):
-            respDist[:, k] = np.mean(
-                (x - mu[:, k].reshape(-1, 1)) ** 2 * PcGivenx[k, :].reshape(1, -1), axis=1)
-
+            respDist[:, k] = np.mean((x - mu[:, k].reshape(-1, 1)) ** 2 * PcGivenx[k, :].reshape(1, -1), axis=1)
         vary = respDist / respTot.T
         vary = (vary >= minVary) * vary + (vary < minVary) * minVary
 
@@ -121,9 +113,7 @@ def mogLogLikelihood(p, mu, vary, x):
         # Compute log P(c)p(x|c) and then log p(x)
         logPcAndx = np.log(p) - 0.5 * N * np.log(2 * np.pi) \
                     - 0.5 * np.sum(np.log(vary), axis=0).reshape(-1, 1) \
-                    - 0.5 * \
-                      np.sum(ivary * (x[:, t].reshape(-1, 1) - mu)
-                             ** 2, axis=0).reshape(-1, 1)
+                    - 0.5 * np.sum(ivary * (x[:, t].reshape(-1, 1) - mu) ** 2, axis=0).reshape(-1, 1)
 
         mx = np.max(logPcAndx, axis=0)
         logLikelihood[t] = np.log(np.sum(np.exp(logPcAndx - mx))) + mx
