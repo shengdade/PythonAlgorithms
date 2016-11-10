@@ -149,14 +149,21 @@ def Conv2DBackward(grad_y, x, y, w):
         grad_x: Gradients wrt. the inputs.
         grad_w: Gradients wrt. the weights.
     """
+    # Compute the padding
+    pad = (w.shape[0] - 1, w.shape[1] - 1)
+
     # Update grad_w
     x_t = np.transpose(x, [3, 1, 2, 0])
     grad_y_t = np.transpose(grad_y, [1, 2, 0, 3])
-    I, J = grad_y_t.shape[:2]
-    grad_w = Conv2D(x_t, grad_y_t, [I - 1, J - 1])
+    grad_w = Conv2D(x_t, grad_y_t, pad)
     grad_w = np.transpose(grad_w, [1, 2, 0, 3])
 
     # Update grad_x
+    w_t = w[::-1, ::-1, :, :]
+    w_t = np.transpose(w_t, [0, 1, 3, 2])
+    grad_x = Conv2D(grad_y, w_t, pad)
+    '''
+    # Another way of updating grad_x
     I, J, C, K = w.shape
     w_t = np.zeros((I, J, K, C))
     for i in range(I):
@@ -164,8 +171,8 @@ def Conv2DBackward(grad_y, x, y, w):
             for k in range(K):
                 for c in range(C):
                     w_t[i, j, k, c] = w[I - i - 1, J - j - 1, c, k]
-
-    grad_x = Conv2D(grad_y, w_t, [I - 1, J - 1])
+    grad_x = Conv2D(grad_y, w_t, pad)
+    '''
 
     return grad_x, grad_w
 
