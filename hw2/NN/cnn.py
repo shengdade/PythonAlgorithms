@@ -149,11 +149,25 @@ def Conv2DBackward(grad_y, x, y, w):
         grad_x: Gradients wrt. the inputs.
         grad_w: Gradients wrt. the weights.
     """
-    grad_y = np.transpose(grad_y, [1, 2, 3, 0])
-    I, J = grad_y.shape[:2]
-    grad_x = Conv2D(x, grad_y, [I - 1, J - 1])
-    # grad_w = ...
-    # return grad_x, grad_w
+    # Update grad_w
+    x_t = np.transpose(x, [3, 1, 2, 0])
+    grad_y_t = np.transpose(grad_y, [1, 2, 0, 3])
+    I, J = grad_y_t.shape[:2]
+    grad_w = Conv2D(x_t, grad_y_t, [I - 1, J - 1])
+    grad_w = np.transpose(grad_w, [1, 2, 0, 3])
+
+    # Update grad_x
+    I, J, C, K = w.shape
+    w_t = np.zeros((I, J, K, C))
+    for i in range(I):
+        for j in range(J):
+            for k in range(K):
+                for c in range(C):
+                    w_t[i, j, k, c] = w[I - i - 1, J - j - 1, c, k]
+
+    grad_x = Conv2D(grad_y, w_t, [I - 1, J - 1])
+
+    return grad_x, grad_w
 
 
 def CNNForward(model, x):
