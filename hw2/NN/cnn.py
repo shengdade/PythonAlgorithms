@@ -149,13 +149,11 @@ def Conv2DBackward(grad_y, x, y, w):
         grad_x: Gradients wrt. the inputs.
         grad_w: Gradients wrt. the weights.
     """
-    ###########################
-    # Insert your code here.
-    # grad_x = ...
+    grad_y = np.transpose(grad_y, [1, 2, 3, 0])
+    I, J = grad_y.shape[:2]
+    grad_x = Conv2D(x, grad_y, [I - 1, J - 1])
     # grad_w = ...
     # return grad_x, grad_w
-    ###########################
-    raise Exception('Not implemented')
 
 
 def CNNForward(model, x):
