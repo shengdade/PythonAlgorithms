@@ -246,17 +246,13 @@ def CNNUpdate(model, eps, momentum):
         eps:      Learning rate.
         momentum: Momentum.
     """
-    ###########################
-    # Insert your code here.
     # Update the weights.
-    # model['W1'] = ...
-    # model['W2'] = ...
-    # model['W3'] = ...
-    # model['b1'] = ...
-    # model['b2'] = ...
-    # model['b3'] = ...
-    ###########################
-    raise Exception('Not implemented')
+    model['W1'] = model['W1'] - eps * model['dE_dW1']
+    model['W2'] = model['W2'] - eps * model['dE_dW2']
+    model['W3'] = model['W3'] - eps * model['dE_dW3']
+    model['b1'] = model['b1'] - eps * model['dE_db1']
+    model['b2'] = model['b2'] - eps * model['dE_db2']
+    model['b3'] = model['b3'] - eps * model['dE_db3']
 
 
 def main():
