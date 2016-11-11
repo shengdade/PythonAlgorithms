@@ -85,13 +85,25 @@ def InitCNN(num_channels, filter_size, num_filters_1, num_filters_2,
     b1 = np.zeros((num_filters_1))
     b2 = np.zeros((num_filters_2))
     b3 = np.zeros((num_outputs))
+    v_W1 = np.zeros(W1.shape)
+    v_W2 = np.zeros(W2.shape)
+    v_W3 = np.zeros(W3.shape)
+    v_b1 = np.zeros(b1.shape)
+    v_b2 = np.zeros(b2.shape)
+    v_b3 = np.zeros(b3.shape)
     model = {
         'W1': W1,
         'W2': W2,
         'W3': W3,
         'b1': b1,
         'b2': b2,
-        'b3': b3
+        'b3': b3,
+        'v_W1': v_W1,
+        'v_W2': v_W2,
+        'v_W3': v_W3,
+        'v_b1': v_b1,
+        'v_b2': v_b2,
+        'v_b3': v_b3
     }
     return model
 
@@ -247,12 +259,19 @@ def CNNUpdate(model, eps, momentum):
         momentum: Momentum.
     """
     # Update the weights.
-    model['W1'] = model['W1'] - eps * model['dE_dW1']
-    model['W2'] = model['W2'] - eps * model['dE_dW2']
-    model['W3'] = model['W3'] - eps * model['dE_dW3']
-    model['b1'] = model['b1'] - eps * model['dE_db1']
-    model['b2'] = model['b2'] - eps * model['dE_db2']
-    model['b3'] = model['b3'] - eps * model['dE_db3']
+    model['v_W1'] = momentum * model['v_W1'] + eps * model['dE_dW1']
+    model['v_W2'] = momentum * model['v_W2'] + eps * model['dE_dW2']
+    model['v_W3'] = momentum * model['v_W3'] + eps * model['dE_dW3']
+    model['v_b1'] = momentum * model['v_b1'] + eps * model['dE_db1']
+    model['v_b2'] = momentum * model['v_b2'] + eps * model['dE_db2']
+    model['v_b3'] = momentum * model['v_b3'] + eps * model['dE_db3']
+
+    model['W1'] = model['W1'] - model['v_W1']
+    model['W2'] = model['W2'] - model['v_W2']
+    model['W3'] = model['W3'] - model['v_W3']
+    model['b1'] = model['b1'] - model['v_b1']
+    model['b2'] = model['b2'] - model['v_b2']
+    model['b3'] = model['b3'] - model['v_b3']
 
 
 def main():
@@ -262,7 +281,7 @@ def main():
 
     # Hyper-parameters. Modify them if needed.
     eps = 0.1
-    momentum = 0.0
+    momentum = 0.5
     num_epochs = 30
     filter_size = 5
     num_filters_1 = 8
