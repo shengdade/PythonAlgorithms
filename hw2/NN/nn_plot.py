@@ -1,5 +1,5 @@
-from util import Load, Save
-from nn import InitNN, CheckGrad, NNForward, NNBackward, NNUpdate, Train
+from util import Load, Save, LoadData
+from nn import InitNN, CheckGrad, NNForward, NNBackward, NNUpdate, Train, Evaluate
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -72,11 +72,26 @@ def save_figure(train, valid, ylabel, fname):
     plt.clf()
 
 
+def evaluate_model(model_fname, result_fname, forward, batch_size):
+    model = Load(model_fname)
+    inputs_train, inputs_valid, inputs_test, target_train, target_valid, target_test = LoadData('../toronto_face.npz')
+    train_ce, train_acc = Evaluate(inputs_train, target_train, model, forward, batch_size=batch_size)
+    valid_ce, valid_acc = Evaluate(inputs_valid, target_valid, model, forward, batch_size=batch_size)
+    test_ce, test_acc = Evaluate(inputs_test, target_test, model, forward, batch_size=batch_size)
+    f = open(result_fname, 'w')
+    f.write('CE: Train %.5f Validation %.5f Test %.5f\n' % (train_ce, valid_ce, test_ce))
+    f.write('Acc: Train {:.5f} Validation {:.5f} Test {:.5f}\n'.format(train_acc, valid_acc, test_acc))
+    f.close()
+    print('Results written to ' + result_fname)
+
+
 def nn_main(*args):
     # Run NN and save model, stats
     fname = nn_with_args(*args)
     # Plot and save figure based on model, stats
     plot_figures('nn_stats/' + fname + '.npz')
+    # Evaluate model and save results
+    evaluate_model('nn_model/' + fname + '.npz', 'nn_result/' + fname, NNForward, args[4])
 
 
 if __name__ == '__main__':

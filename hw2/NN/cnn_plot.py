@@ -1,7 +1,7 @@
 from util import Save, Load
 from nn import CheckGrad, Train
 from cnn import InitCNN, CNNForward, CNNBackward, CNNUpdate
-from nn_plot import save_figure
+from nn_plot import save_figure, evaluate_model
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -70,6 +70,8 @@ def cnn_main(*args):
     fname = cnn_with_args(*args)
     # Plot and save figure based on model, stats
     plot_figures('cnn_stats/' + fname + '.npz')
+    # Evaluate model and save results
+    evaluate_model('cnn_model/' + fname + '.npz', 'cnn_result/' + fname, CNNForward, args[6])
 
 
 if __name__ == '__main__':
