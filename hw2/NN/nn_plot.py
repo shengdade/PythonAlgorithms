@@ -39,8 +39,6 @@ def nn_with_args(num_hiddens=[16, 32],
     Save('nn_model/' + fname, model)
     Save('nn_stats/' + fname, stats)
 
-    return fname
-
 
 def plot_figures(stats_fname):
     stats = Load(stats_fname)
@@ -87,7 +85,9 @@ def evaluate_model(model_fname, result_fname, forward, batch_size):
 
 def nn_main(*args):
     # Run NN and save model, stats
-    fname = nn_with_args(*args)
+    nn_with_args(*args)
+    # Get file name based on arguments
+    fname = str(args[0]) + '_' + str(args[1]) + '_' + str(args[2]) + '_' + str(args[3]) + '_' + str(args[4])
     # Plot and save figure based on model, stats
     plot_figures('nn_stats/' + fname + '.npz')
     # Evaluate model and save results

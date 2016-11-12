@@ -44,8 +44,6 @@ def cnn_with_args(eps=0.1,
     Save('cnn_model/' + fname, model)
     Save('cnn_stats/' + fname, stats)
 
-    return fname
-
 
 def plot_figures(stats_fname):
     stats = Load(stats_fname)
@@ -67,7 +65,10 @@ def get_cnn_path(stats_fname):
 
 def cnn_main(*args):
     # Run CNN and save model, stats
-    fname = cnn_with_args(*args)
+    cnn_with_args(*args)
+    # Get file name based on arguments
+    fname = str(args[0]) + '_' + str(args[1]) + '_' + str(args[2]) + '_' + str(args[3]) + '_' + \
+            str(args[4]) + '_' + str(args[5]) + '_' + str(args[6])
     # Plot and save figure based on model, stats
     plot_figures('cnn_stats/' + fname + '.npz')
     # Evaluate model and save results
