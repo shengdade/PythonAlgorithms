@@ -275,8 +275,8 @@ def Train(model, forward, backward, update, eps, momentum, num_epochs,
         train_acc_list.append((epoch, train_acc))
         valid_ce_list.append((epoch, valid_ce))
         valid_acc_list.append((epoch, valid_acc))
-        DisplayPlot(train_ce_list, valid_ce_list, 'Cross Entropy', number=0)
-        DisplayPlot(train_acc_list, valid_acc_list, 'Accuracy', number=1)
+        # DisplayPlot(train_ce_list, valid_ce_list, 'Cross Entropy', number=0)
+        # DisplayPlot(train_acc_list, valid_acc_list, 'Accuracy', number=1)
 
     print()
     train_ce, train_acc = Evaluate(
