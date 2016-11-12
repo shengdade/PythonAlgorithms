@@ -76,8 +76,8 @@ def cnn_main(*args):
 
 if __name__ == '__main__':
     cnn_main(0.1,  # eps
-             0.5,  # momentum
-             2,  # num_epochs
+             0.0,  # momentum
+             30,  # num_epochs
              5,  # filter_size
              8,  # num_filters_1
              16,  # num_filters_1

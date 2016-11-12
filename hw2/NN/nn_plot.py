@@ -97,6 +97,6 @@ def nn_main(*args):
 if __name__ == '__main__':
     nn_main([16, 32],  # num_hiddens
             0.01,  # eps
-            0.5,  # momentum
-            15,  # num_epochs
+            0.0,  # momentum
+            1000,  # num_epochs
             100)  # batch_size
