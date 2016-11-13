@@ -1,6 +1,7 @@
 from kmeans import *
 import sys
 import matplotlib.pyplot as plt
+from kmeans import KMeans
 
 plt.ion()
 
@@ -38,6 +39,7 @@ def mogEM(x, K, iters, randConst=1.0, minVary=0.0):
     mu = mn + np.random.randn(N, K) * (np.sqrt(vr) / randConst)
 
     # ------------------- Answers ---------------------
+    mu = KMeans(x, K, 5)
 
     # ------------------------------------------------------------
     vary = vr * np.ones((1, K)) * 2
