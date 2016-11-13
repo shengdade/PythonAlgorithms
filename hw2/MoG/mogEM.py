@@ -131,8 +131,7 @@ def q2():
     randConst = 0.8
 
     # load data
-    inputs_train, inputs_valid, inputs_test, target_train, target_valid, target_test = LoadData(
-        '../toronto_face.npz')
+    inputs_train, inputs_valid, inputs_test, target_train, target_valid, target_test = LoadData('../toronto_face.npz')
 
     # Train a MoG model with 7 components on all training data, i.e., inputs_train,
     # with both original initialization and kmeans initialization.
@@ -180,27 +179,23 @@ def q4():
 
     # extract data of class 1-Anger, 4-Happy
     dataQ4 = LoadDataQ4('../toronto_face.npz')
+
     # images
     x_train_anger = dataQ4['x_train_anger']
     x_train_happy = dataQ4['x_train_happy']
     x_train = np.concatenate([x_train_anger, x_train_happy], axis=1)
-    x_valid = np.concatenate(
-        [dataQ4['x_valid_anger'], dataQ4['x_valid_happy']], axis=1)
-    x_test = np.concatenate(
-        [dataQ4['x_test_anger'], dataQ4['x_test_happy']], axis=1)
+    x_valid = np.concatenate([dataQ4['x_valid_anger'], dataQ4['x_valid_happy']], axis=1)
+    x_test = np.concatenate([dataQ4['x_test_anger'], dataQ4['x_test_happy']], axis=1)
 
     # label
-    y_train = np.concatenate(
-        [dataQ4['y_train_anger'], dataQ4['y_train_happy']])
-    y_valid = np.concatenate(
-        [dataQ4['y_valid_anger'], dataQ4['y_valid_happy']])
+    y_train = np.concatenate([dataQ4['y_train_anger'], dataQ4['y_train_happy']])
+    y_valid = np.concatenate([dataQ4['y_valid_anger'], dataQ4['y_valid_happy']])
     y_test = np.concatenate([dataQ4['y_test_anger'], dataQ4['y_test_happy']])
 
     # Hints: this is p(d), use it based on Bayes Theorem
     num_anger_train = x_train_anger.shape[1]
     num_happy_train = x_train_happy.shape[1]
-    log_likelihood_class = np.log(
-        [num_anger_train, num_happy_train]) - np.log(num_anger_train + num_happy_train)
+    log_likelihood_class = np.log([num_anger_train, num_happy_train]) - np.log(num_anger_train + num_happy_train)
 
     for t in xrange(T):
         K = numComponents[t]
