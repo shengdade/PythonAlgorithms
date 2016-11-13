@@ -8,7 +8,7 @@ if sys.version_info.major == 3:
     raw_input = input
 
 
-def mogEM(x, K, iters, randConst=1, minVary=0):
+def mogEM(x, K, iters, randConst=1.0, minVary=0.0):
     """
     Fits a Mixture of K Diagonal Gaussians on x.
 
@@ -126,7 +126,7 @@ def q2():
     K = 7
     iters = 10
     minVary = 0.01
-    randConst = 1.0
+    randConst = 0.8
 
     # load data
     inputs_train, inputs_valid, inputs_test, target_train, target_valid, target_test = LoadData(
@@ -134,9 +134,34 @@ def q2():
 
     # Train a MoG model with 7 components on all training data, i.e., inputs_train,
     # with both original initialization and kmeans initialization.
-    # ------------------- Add your code here ---------------------
+    p, mu, vary, logLikelihood = mogEM(inputs_train, K, iters, randConst=randConst, minVary=minVary)
+    raw_input('Press Enter.')
 
-    # ------------------- Answers ---------------------
+    # Show the mean vector(s)
+    plt.figure(0)
+    plt.clf()
+    for i in xrange(mu.shape[1]):
+        plt.subplot(1, mu.shape[1], i + 1)
+        plt.imshow(mu[:, i].reshape(48, 48), cmap=plt.cm.gray)
+    plt.draw()
+    raw_input('Press Enter.')
+
+    # Show the variance vector(s)
+    plt.figure(0)
+    plt.clf()
+    for i in xrange(vary.shape[1]):
+        plt.subplot(1, vary.shape[1], i + 1)
+        plt.imshow(vary[:, i].reshape(48, 48), cmap=plt.cm.gray)
+    plt.draw()
+    raw_input('Press Enter.')
+
+    # Show the mixing proportions for the clusters
+    print('p:' + str(p.T))
+    plt.figure(0)
+    plt.clf()
+    x = np.arange(K) + 1
+    plt.bar(x, p)
+    plt.draw()
 
 
 def q4():
@@ -212,7 +237,7 @@ if __name__ == '__main__':
     # -------------------------------------------------------------------------
     # Note: Question 4.2 and 4.3 both need to call function q2
     # you need to comment function q4 below
-    # q2()
+    q2()
 
     # -------------------------------------------------------------------------
     # Note: Question 4.4 both need to call function q4
