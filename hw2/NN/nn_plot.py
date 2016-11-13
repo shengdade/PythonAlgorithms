@@ -83,6 +83,17 @@ def evaluate_model(model_fname, result_fname, forward, batch_size):
     print('Results written to ' + result_fname)
 
 
+def plot_first_weights(model_fname):
+    model = Load(model_fname)
+    W1 = model['W1']
+    plt.clf()
+    for i in xrange(W1.shape[1]):
+        plt.subplot(4, 4, i + 1)
+        plt.imshow(W1[:, i].reshape(48, 48), cmap=plt.cm.gray)
+    plt.savefig('visualization/nn_first_layer_weights.png')
+    print("nn_first_layer_weights.png saved")
+
+
 def nn_main(*args):
     # Run NN and save model, stats
     nn_with_args(*args)
@@ -92,6 +103,8 @@ def nn_main(*args):
     plot_figures('nn_stats/' + fname + '.npz')
     # Evaluate model and save results
     evaluate_model('nn_model/' + fname + '.npz', 'nn_result/' + fname, NNForward, args[4])
+    # Plot the first layer weights
+    # plot_first_weights('nn_model/' + fname + '.npz')
 
 
 if __name__ == '__main__':

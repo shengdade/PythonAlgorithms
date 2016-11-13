@@ -63,6 +63,17 @@ def get_cnn_path(stats_fname):
     return "cnn_figure/" + figure_name
 
 
+def plot_first_filters(model_fname):
+    model = Load(model_fname)
+    W1 = model['W1']
+    plt.clf()
+    for i in xrange(W1.shape[3]):
+        plt.subplot(1, W1.shape[3], i + 1)
+        plt.imshow(W1[:, :, 0, i], cmap=plt.cm.gray)
+    plt.savefig('visualization/cnn_first_layer_filters.png')
+    print("cnn_first_layer_filters.png saved")
+
+
 def cnn_main(*args):
     # Run CNN and save model, stats
     cnn_with_args(*args)
@@ -73,6 +84,8 @@ def cnn_main(*args):
     plot_figures('cnn_stats/' + fname + '.npz')
     # Evaluate model and save results
     evaluate_model('cnn_model/' + fname + '.npz', 'cnn_result/' + fname, CNNForward, args[6])
+    # Plot the first layer filters
+    # plot_first_filters('cnn_model/' + fname + '.npz')
 
 
 if __name__ == '__main__':
