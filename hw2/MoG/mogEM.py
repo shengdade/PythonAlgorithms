@@ -203,15 +203,27 @@ def q4():
         # Train a MoG model with K components
         # Hints: using (x_train_anger, x_train_happy) train 2 MoGs
         # -------------------- Add your code here ------------------------------
-
-        # ------------------- Answers ---------------------
+        p_anger, mu_anger, vary_anger, _ = mogEM(x_train_anger, K, iters, randConst, minVary)
+        p_happy, mu_happy, vary_happy, _ = mogEM(x_train_happy, K, iters, randConst, minVary)
 
         # Compute the probability P(d|x), classify examples, and compute error rate
         # Hints: using (x_train, y_train), (x_valid, y_valid), (x_test, y_test)
         # to compute error rates, you may want to use mogLogLikelihood function
         # -------------------- Add your code here ------------------------------
+        train_mog = np.array([mogLogLikelihood(p_anger, mu_anger, vary_anger, x_train),
+                              mogLogLikelihood(p_happy, mu_happy, vary_happy, x_train)])
+        valid_mog = np.array([mogLogLikelihood(p_anger, mu_anger, vary_anger, x_valid),
+                              mogLogLikelihood(p_happy, mu_happy, vary_happy, x_valid)])
+        test_mog = np.array([mogLogLikelihood(p_anger, mu_anger, vary_anger, x_test),
+                             mogLogLikelihood(p_happy, mu_happy, vary_happy, x_test)])
 
-        # ------------------- Answers ---------------------
+        train_predict = train_mog + log_likelihood_class.reshape(-1, 1)
+        valid_predict = valid_mog + log_likelihood_class.reshape(-1, 1)
+        test_predict = test_mog + log_likelihood_class.reshape(-1, 1)
+
+        errorTrain[t] = np.mean((np.argmax(train_predict, axis=0) != y_train).astype(int))
+        errorValidation[t] = np.mean((np.argmax(valid_predict, axis=0) != y_valid).astype(int))
+        errorTest[t] = np.mean((np.argmax(test_predict, axis=0) != y_test).astype(int))
 
     # Plot the error rate
     plt.figure(0)
@@ -234,11 +246,11 @@ if __name__ == '__main__':
     # -------------------------------------------------------------------------
     # Note: Question 4.2 and 4.3 both need to call function q2
     # you need to comment function q4 below
-    q2()
+    # q2()
 
     # -------------------------------------------------------------------------
     # Note: Question 4.4 both need to call function q4
     # you need to comment function q2 above
-    # q4()
+    q4()
 
     raw_input('Press Enter to continue.')
